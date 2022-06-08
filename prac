@@ -1,0 +1,297 @@
+1=
+.model
+.code
+start:
+mov al,99h;
+mov bl,85h;
+mov cl,75h;
+add al,bl;
+sub al,cl;
+mov ah,4ch;
+int 21h;
+end start
+
+1A=
+.model small
+.data
+array db 01h,02h,03h,04h,05h,06h,07h,08h,09h,0Ah;
+.code 
+start:
+mov ax,@data;
+mov ds,ax;
+mov SI, offset array;
+mov al,[SI];
+adc al,[SI+1];
+adc al,[SI+2];
+adc al,[SI+3];
+adc al,[SI+4];
+adc al,[SI+5];
+adc al,[SI+6];
+adc al,[SI+7];
+adc al,[SI+8];
+adc al,[SI+9];
+mov ah,4ch;
+int 21h;
+end start
+
+2=
+.model small
+.code
+start:
+mov al,04;
+mov bl,02;
+mul bl;
+div bl;
+mov ah,4ch;
+int 21h;
+end start
+
+2A=
+.model small
+.code
+start:
+mov ax,0007h;
+mov bx,0006h;
+mul bx;
+dec bx;
+mul bx;
+dec bx;
+mul bx;
+dec bx;
+mul bx;
+dec bx;
+mul bx;
+mov ah,4ch;
+int 21h;
+end start
+
+2B=
+.model small
+.data
+mean dw 0000;
+.code
+start:
+mov ax,@data;
+mov ds,ax;
+mov SI,0000h;
+mov al,[SI];
+adc al,[SI+1];
+adc al,[SI+2];
+adc al,[SI+3];
+adc al,[SI+4];
+adc al,[SI+5];
+adc al,[SI+6];
+adc al,[SI+7];
+adc al,[SI+8];
+adc al,[SI+9];
+mov bx, 000Ah;
+DIV bx;
+mov [mean],ax;
+mov ah,4ch;
+int 21h;
+end start
+
+3=
+.model small
+.code
+start:
+mov al, 56h;
+mov cl, 01;
+ror al, cl;
+rol al, cl;
+rcr al, cl;
+rcl al, cl;
+sar al, cl;
+shr al, cl;
+sal al, cl;
+mov ah,4ch;
+int 21h;
+end start
+
+4=
+.model small
+.data 
+positive db "Number is positive$";
+negative db "Number is Negative$";
+.code
+start:
+mov ax,@data;
+mov ds,ax;
+mov al,43h;
+and al,80h;
+jz post;
+lea dx,negative;
+jmp ans
+post:lea dx,positive
+ans:mov ah,09h;
+int 21h;
+mov ah,4ch;
+int 21h;
+End Start
+end
+
+5=
+.model small
+.data
+array1 db 'abcdefghij$'
+array2 db 10 dup(0)
+.code
+start:
+mov ax, @data;
+mov ds, ax;
+mov cl, 0Bh;
+mov Bx, 0000h;
+aa: mov al, array1[Bx];
+mov array2[Bx], al;
+inc Bx;
+loop aa
+lea dx, array2;
+mov ah, 09h;
+int 21h;
+mov ah,4ch;
+int 21h
+end start
+
+6=
+.model small
+.stack 100h
+.data
+array db 1,2,3,4,5,6,7,8,9
+array2 db 10 dup(0)
+.code
+start:
+mov ax,@data
+mov ds,ax;
+mov ax,0000h;
+mov cl,0ah;
+mov si,offset array;
+mov di,offset array2;
+again:mov al,[si];
+call sqr;
+dec cl;
+JNZ again;
+mov ah,4ch;
+int 21h;
+sqr proc near;
+mul al;
+mov [di],al;
+inc si
+inc di
+ret
+sqr endp
+end start
+
+
+7=
+.model small
+cube macro ax,bx;
+mul bl;
+mul bx;
+Endm
+.data
+array db 1,2,3,4,5,6,7,8,9;
+cba db 10 dup(0)
+.code 
+start:
+mov ax,@data;
+mov ds,ax;
+mov si,offset array;
+mov di,offset cba;
+mov cl,09h;
+repeat:mov bx,0000h;
+mov ax,0000h;
+mov al,[si];
+mov bl,al;
+cube ax,bx;
+mov [di],ax;
+inc si;
+inc di;
+inc di;
+loop repeat
+mov ah,4ch;
+int 21h
+End start
+
+
+8=
+.model small
+.data
+array1 db 'MALAYALAM$'
+array2 db 'length of the string is $'
+.code
+start: mov ax,@data
+mov ds,ax
+
+lea si,array1
+mov cl,00h
+mov al,[SI]
+aa: 
+cmp al,24h
+jz bb
+inc cl
+inc SI
+mov al,[SI]
+jmp aa
+
+bb:
+mov ah,09h
+lea dx,array2
+int 21h
+
+mov dl,cl
+add dl,30h
+mov ah,02h
+int 21h
+
+mov ah, 4ch
+int 21h
+end start
+endd
+
+
+9=.model small
+.data
+array db "MALAYALAM"
+array2 db "STRING IS NOT PALINDROME$"
+array3 db "STRING IS PALINDROME$"
+.code
+start:
+mov ax,@data
+mov ds,ax;
+lea si , array;
+lea di,array;
+add di,08h
+mov cl,05h
+aa:
+cmp cl,00;
+jz bb
+ mov al,[si]
+mov bl,[si]
+inc si;
+dec di;
+dec cl;
+cmp al,bl;
+jz bb
+mov ah,09h;
+lea dx,array2
+int 21h;
+jmp endl
+bb:
+lea dx,array3;
+mov ah,09h;
+int 21h;
+endl:
+mov ah,4ch;
+int 21h;
+end start 
+end
+
+
+
+
+
+
+
+
+
+
